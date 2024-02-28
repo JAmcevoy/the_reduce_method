@@ -67,6 +67,35 @@ const teamMembers = [
 ];
 
 // Totaling a specific object property
+let totalExperience = teamMembers.reduce((acc, curr) => acc + curr.yrsExperience, 0); // we need to dive into it using dot notation  to get the yrsExperience. 
+// The only real difference is that each time the  callback function executes, it’s executing on  
+// an object now instead of an individual number, so instead of adding the element itself.
+console.log(totalExperience);
+
+// Without specifying the initial value (0),  
+// the accumulator starts out as the first element  in the array which in this case is an object.  
+// Then, JavaScript faithfully does what we told it to, it  attempts to add curr.yrsExperience to this object.  
+// Now it’s trying to add an object and an integer  together, which results in us ending up with  
+// this weird object/string/integer hybrid, and this  code is just all sorts of broken. So once again,  
+// make sure to always specify the initial  value you want to use for the accumulator. 
 
 
 // Grouping by a property, and totaling it too
+//{Developer: 12, Designer: 4} <---This is what we what
+let experienceByProfession = teamMembers.reduce((acc, curr) => {
+//boundary of the call back function
+  let key = curr.profession;
+  if (!acc[key]) { //check whether the key already exists in the object we’re going to be accumulating into.
+    acc[key] = curr.yrsExperience; //  If it doesn’t yet exist, I’ll set it equal to curr.yrsExperience. This means the first time  we see a new profession, that property will be added into the accumulator and its value  will be set to the team member’s experience.  
+  }else {
+    acc[key] += curr.yrsExperience; //Otherwise, if the key does already exist, it’s as  simple as adding the current member’s experience to the already existing value
+  }
+  return acc; //When I’m done, all  I’ve got to do is return the accumulator.
+}, {});// ', {}'initial value, an empty object
+
+console.log(experienceByProfession);
+
+// The great thing about the reduce method  is its versatility. For example, watch  
+// what happens when I add another team member  with a different profession to the array. 
+// I can run the code again and the  result already has a new category  
+// with the relevant years of experience.
